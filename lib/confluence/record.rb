@@ -44,12 +44,12 @@ module Confluence
       end
     end
 
+    # Returns the the Confluence API client.
+    #
     def client
       Record.client
     end
 
-    attr_accessor :attributes
-    
     # Initializes a new record.
     #
     # ==== Parameters
@@ -77,10 +77,14 @@ module Confluence
       self[:id]
     end
     
+    # Retrieves the labels of the record.
+    #
     def labels
       @labels ||= client.getLabelsById(record_id).collect {|label| label["name"]}
     end
     
+    # Sets the labels of the record.
+    #
     def labels=(value)
       removed_labels = labels - value
       added_labels = value - labels
@@ -89,6 +93,12 @@ module Confluence
       client.addLabelByName(added_labels.join(" "), record_id) unless added_labels.empty?
       
       @labels = value
+    end
+    
+    def to_hash
+      hash = Hash.new
+      @attributes.each { |key, value| hash[key.to_s] = value }
+      hash
     end
   end
 end

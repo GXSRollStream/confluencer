@@ -74,19 +74,37 @@ describe Confluence::Page do
     page = store_test_page
     
     new_session do
-        # create test page with same title but updated content
-        updated_page = create_test_page "updated content"
+      # create test page with same title but updated content
+      updated_page = create_test_page "updated content"
 
-        updated_page.page_id.should be_nil
-        updated_page.title.should == page.title
-        updated_page.space.should == page.space
+      updated_page.page_id.should be_nil
+      updated_page.title.should == page.title
+      updated_page.space.should == page.space
 
-        # store page
-        updated_page.store
+      # store page
+      updated_page.store
 
-        # assert version
-        updated_page.version.should > page.version
-        updated_page.content.should == "updated content"
-      end      
+      # assert version
+      updated_page.version.should > page.version
+      updated_page.content.should == "updated content"
+    end      
+  end
+  
+  it "should keep metadata for the page" do
+    page = store_test_page
+    
+    # set :creator in {details:label=bender} to 'rgabo'
+    page.details(:confluencer)[:creator] = 'rgabo'
+  
+    page.details(:confluencer)[:creator].should == 'rgabo'
+  end
+  
+  it "should include metadata in content of the page" do
+    page = store_test_page
+
+    # set :creator in {details:label=bender} to 'rgabo'
+    page.details(:confluencer)[:creator] = 'rgabo'
+          
+    page.to_hash['content'].should include("{details:label=confluencer}\ncreator=rgabo\n{details}")
   end
 end

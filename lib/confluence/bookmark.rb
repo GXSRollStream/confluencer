@@ -1,33 +1,32 @@
 module Confluence
   class Bookmark < Page
-    attr_reader :bookmark_url, :description
+    attr_accessor :bookmark_url, :description
 
     def initialize(hash)
-      super(hash)
+      # set and delete bookmark_url and description
+      @bookmark_url = hash.delete :bookmark_url
+      @description = hash.delete :description
       
-      # if no content, try to use hash to initialize, delete in the process
-      unless content
-        self.bookmark_url = attributes.delete :bookmark_url
-        self.description = attributes.delete :description
+      # initialize page
+      super(hash)
+    end
+    
+    def [](attr)
+      case attr
+      when :bookmark_url: @bookmark_url
+      when :description: @description
       else
-        # parse bookmark_url and description out of content
-        @bookmark_url = content[/\{bookmark:url=([^\}]+)\}/, 1]
-        @description = content[/\{bookmark.*\}([^\{]*)\{bookmark\}/, 1]
+        super(attr)
       end
     end
     
-    def bookmark_url=(value)
-      @bookmark_url = value
-      
-      # update content with new bookmark_url
-      update_content
-    end
-    
-    def description=(value)
-      @description = value
-
-      # update content with new description
-      update_content
+    def []=(attr, value)
+      case attr
+      when :bookmark_url: @bookmark_url = value
+      when :description: @description = value
+      else
+        super(attr, value)
+      end
     end
     
     def store
@@ -38,7 +37,23 @@ module Confluence
       super
     end
     
+    def to_hash
+      page_hash = super
+
+      if page_hash.key? "content"
+        page_hash["content"] << "\n" << bookmark_content
+      else
+        page_hash["content"] = bookmark_content
+      end
+      
+      page_hash
+    end
+    
     private
+    
+    def bookmark_content
+      "{bookmark:url=#{@bookmark_url}}#{@description}{bookmark}"
+    end
     
     def self.find_criteria(args)
       result = super(args) || begin
@@ -49,10 +64,6 @@ module Confluence
       end
       
       result
-    end
-    
-    def update_content
-      self.content = "{bookmark:url=#{@bookmark_url}}#{@description}{bookmark}"
     end
   end
 end
