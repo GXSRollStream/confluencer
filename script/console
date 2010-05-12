@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+libs =  " -r irb/completion"
+
+libs <<  " -r #{File.dirname(__FILE__) + '/../lib/confluencer.rb'}"
+
+# load console_init
+libs <<  " -r #{File.dirname(__FILE__) + '/console_init.rb'}"
+
+puts "Loading confluencer..."
+exec "irb #{libs} --simple-prompt"

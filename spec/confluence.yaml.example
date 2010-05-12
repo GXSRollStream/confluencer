@@ -1,0 +1,33 @@
+# Confluence configuration
+:test:
+    :url:           http://confluence.acmecorp.com
+    :username:      roger
+    :password:      jessica
+    :space:         confluencer
+    :page_title:    Confluencer RSpec Test Page
+    
+# Log4r configuration
+log4r_config:
+    pre_config:
+        global:
+            level: DEBUG
+        root:
+            level: DEBUG
+
+    # loggers
+    loggers:
+      - name        : Confluence::Client
+        level       : DEBUG
+        additive    : 'false'
+        trace       : 'false'
+        outputters:
+          - stdout
+
+    # outputters
+    outputters:
+      - type     : StdoutOutputter
+        name     : stdout 
+        level    : DEBUG
+        formatter:
+          type        : PatternFormatter
+          pattern     : '%d %C (%X{token}) [%l]: %m'
