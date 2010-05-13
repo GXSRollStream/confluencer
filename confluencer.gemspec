@@ -5,23 +5,23 @@
 
 Gem::Specification.new do |s|
   s.name = %q{confluencer}
-  s.version = "0.3.1"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Gabor Ratky"]
-  s.date = %q{2010-05-12}
+  s.date = %q{2010-05-13}
   s.description = %q{ActiveRecord-like classes to access Confluence through XMLRPC.}
   s.email = %q{rgabo@rgabostyle.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+     "README"
   ]
   s.files = [
     ".document",
      ".gitignore",
      ".rvmrc",
      "LICENSE",
-     "README.rdoc",
+     "README",
      "Rakefile",
      "VERSION",
      "confluencer.gems",
@@ -71,11 +71,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 1.3.0"])
+      s.add_runtime_dependency(%q<log4r>, [">= 1.1.7"])
     else
       s.add_dependency(%q<rspec>, [">= 1.3.0"])
+      s.add_dependency(%q<log4r>, [">= 1.1.7"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 1.3.0"])
+    s.add_dependency(%q<log4r>, [">= 1.1.7"])
   end
 end
 
