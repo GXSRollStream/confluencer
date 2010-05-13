@@ -107,4 +107,14 @@ describe Confluence::Page do
           
     page.to_hash['content'].should include("{details:label=confluencer}\ncreator=rgabo\n{details}")
   end
+  
+  it "should copy metadata from one page to another" do
+    page = create_test_page
+    page.details(:confluencer)[:creator] = 'rgabo'
+    
+    new_page = create_test_page
+    new_page.details = page.details
+    
+    new_page.details(:confluencer)[:creator].should == 'rgabo'
+  end
 end

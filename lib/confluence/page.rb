@@ -35,12 +35,18 @@ module Confluence
       @details = []
     end
     
-    def details(label)
+    def details(label = :all)
+      return @details if label == :all
+      
       unless result = @details.find {|d| d.label == label}
         @details << (result = Details.new(label))
       end
             
       result
+    end
+    
+    def details=(value)
+      @details = value
     end
     
     def children(klass = self.class)
