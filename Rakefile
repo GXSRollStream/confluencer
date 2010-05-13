@@ -11,6 +11,7 @@ begin
     gem.homepage = "http://github.com/rgabo/confluencer"
     gem.authors = ["Gabor Ratky"]
     gem.add_development_dependency "rspec", ">= 1.3.0"
+    gem.add_runtime_dependency "log4r", ">= 1.1.7"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
