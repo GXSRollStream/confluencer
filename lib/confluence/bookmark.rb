@@ -2,13 +2,26 @@ module Confluence
   class Bookmark < Page
     attr_accessor :bookmark_url, :description
 
+    BOOKMARK_REGEXP = /\{bookmark.*\}[^\{]*\{bookmark\}/
+    BOOKMARK_URL_REGEXP = /\{bookmark:url=([^\}]+)\}/
+    DESCRIPTION_REGEXP = /\{bookmark.*\}([^\{]*)\{bookmark\}/
+    
     def initialize(hash)
-      # set and delete bookmark_url and description
+      # set and delete bookmark_url and description coming from hash
       @bookmark_url = hash.delete :bookmark_url
       @description = hash.delete :description
       
       # initialize page
       super(hash)
+      
+      # if no bookmark_url from hash, initialize from content
+      unless @bookmark_url
+        @bookmark_url = content[/\{bookmark:url=([^\}]+)\}/, 1]
+        @description = content[/\{bookmark.*\}([^\{]*)\{bookmark\}/, 1]
+      end
+      
+      # remove {bookmark} macro from content
+      content.gsub!(BOOKMARK_REGEXP, "") if content
     end
     
     def [](attr)

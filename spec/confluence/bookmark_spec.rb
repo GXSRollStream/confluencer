@@ -8,6 +8,15 @@ describe Confluence::Bookmark do
     bookmark.description.should == 'Home sweet home'
   end
   
+  it "should initialize bookmark_url and descrition from content" do
+    bookmark = Confluence::Bookmark.new "content" => "{bookmark:url=http://github.com/rgabo/confluencer}Home sweet home{bookmark}"
+    
+    bookmark.bookmark_url.should == 'http://github.com/rgabo/confluencer'
+    bookmark.description.should == 'Home sweet home'
+    
+    bookmark.content.should_not include "bookmark"
+  end
+  
   it "should get and set bookmark_url and description using #[]" do
     bookmark = Confluence::Bookmark.new :bookmark_url => 'http://github.com/rgabo/confluencer', :description => 'Home sweet home'
 
