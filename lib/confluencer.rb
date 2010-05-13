@@ -11,6 +11,7 @@ require 'confluence/session'
 
 require 'confluence/findable'
 require 'confluence/record'
+require 'confluence/user'
 require 'confluence/space'
 require 'confluence/page'
 require 'confluence/bookmark'

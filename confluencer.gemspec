@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
      "lib/confluence/record.rb",
      "lib/confluence/session.rb",
      "lib/confluence/space.rb",
+     "lib/confluence/user.rb",
      "lib/confluencer.rb",
      "script/console",
      "script/console_init.rb",
