@@ -26,6 +26,24 @@ module Confluence
       end
     end
     
+    def get_page(args)
+      args[:parent_title] ||= "Home"
+
+      # check if page already exists
+      find_page(args) or begin
+        # page does not exist yet, create it
+        page = Confluence::Page.new :space => self.key, :title => args[:title]
+        
+        # look for the parent by title, set parentId if found
+        if parent_page = find_page(:title => args[:parent_title])
+          page.parent_id = parent_page.page_id 
+        end
+        
+        # store the page  
+        page.store
+      end
+    end
+    
     private
     
     def self.find_all

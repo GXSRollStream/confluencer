@@ -46,4 +46,17 @@ describe Confluence::Space do
       bookmark.remove
     end
   end
+  
+  it "should get a page and create if it does not exist" do
+    new_session do
+      # get page with random name
+      random_page = test_space.get_page :title => "RandomPage #{rand(10000)}"
+      
+      random_page.should_not be_nil
+      random_page.space == test_space.key
+      
+      # remove random_page afterwards
+      random_page.remove
+    end
+  end
 end
