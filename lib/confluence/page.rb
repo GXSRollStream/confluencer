@@ -2,7 +2,7 @@ module Confluence
   class Page < Record
     class Details < Hash
       REGEXP = /\{details:label=([^\}]+)\}([^\{}]*)\{details\}/m
-      PAIR_REGEXP = /(.+)=(.+)/
+      PAIR_REGEXP = /([^:]+):([^\n]+)/m
       
       attr_reader :label
       
@@ -17,7 +17,7 @@ module Confluence
         content = "{details:label=#{label}}\n"
         
         each_pair do |key, value|
-          content << "#{key}=#{value}\n"
+          content << "#{key}:#{value}\n"
         end
         
         # end of details macro
@@ -31,8 +31,10 @@ module Confluence
           # match label and the key/value pairs
           @label, pairs = content.match(REGEXP).captures
         
-          Hash[*pairs.match(PAIR_REGEXP).captures].each do |key, value|
-            self[key.to_sym] = value
+          pairs.strip.lines.each do |line|
+            if line =~ PAIR_REGEXP
+              self[$1.to_sym] = $2.strip
+            end
           end
         end
       end

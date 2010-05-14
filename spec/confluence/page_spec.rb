@@ -12,7 +12,7 @@ describe Confluence::Page::Details do
     
     details.to_s.should == <<-DETAILS
 {details:label=confluencer}
-creator=rgabo
+creator:rgabo
 {details}
 DETAILS
   end
@@ -20,7 +20,7 @@ DETAILS
   it "should initialize with macro content" do
     details = Confluence::Page::Details.new :content => <<-DETAILS
 {details:label=confluencer}
-creator=rgabo
+creator:rgabo
 {details}
 DETAILS
 
@@ -33,7 +33,7 @@ describe Confluence::Page::DetailsCollection do
   it "should scan content for details" do
     hash = Confluence::Page::DetailsCollection.new <<-CONTENT
 {details:label=confluencer}
-creator=rgabo
+creator:rgabo
 {details}
 
 {details:label=ruby}
@@ -150,7 +150,7 @@ describe Confluence::Page do
     # set :creator in {details:label=bender} to 'rgabo'
     page.details[:confluencer][:creator] = 'rgabo'
           
-    page.to_hash['content'].should include("{details:label=confluencer}\ncreator=rgabo\n{details}")
+    page.to_hash['content'].should include("{details:label=confluencer}\ncreator:rgabo\n{details}")
   end
   
   it "should copy metadata from one page to another" do
@@ -164,7 +164,7 @@ describe Confluence::Page do
   end
   
   it "should parse metadata from content" do
-    page = Confluence::Page.new "content" => "{details:label=confluencer}\ncreator=rgabo\n{details}"
+    page = Confluence::Page.new "content" => "{details:label=confluencer}\ncreator:rgabo\n{details}\nh3. Some other content"
     
     page.details[:confluencer][:creator].should == "rgabo"
   end
