@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{confluencer}
-  s.version = "0.4.2"
+  s.version = "0.4.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Gabor Ratky"]
-  s.date = %q{2010-05-13}
+  s.date = %q{2010-05-14}
   s.description = %q{ActiveRecord-like classes to access Confluence through XMLRPC.}
   s.email = %q{rgabo@rgabostyle.com}
   s.extra_rdoc_files = [
@@ -46,6 +46,7 @@ Gem::Specification.new do |s|
      "spec/confluence/record_spec.rb",
      "spec/confluence/session_spec.rb",
      "spec/confluence/space_spec.rb",
+     "spec/confluence/user_spec.rb",
      "spec/confluencer_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"
@@ -62,6 +63,7 @@ Gem::Specification.new do |s|
      "spec/confluence/record_spec.rb",
      "spec/confluence/session_spec.rb",
      "spec/confluence/space_spec.rb",
+     "spec/confluence/user_spec.rb",
      "spec/confluencer_spec.rb",
      "spec/spec_helper.rb"
   ]
