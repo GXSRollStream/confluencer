@@ -55,7 +55,7 @@ module Confluence
       end
       
       def to_s
-        self.to_a.join("\n")
+        values.join("\n")
       end
     end  
     

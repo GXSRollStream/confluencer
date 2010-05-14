@@ -14,14 +14,16 @@ module Confluence
       # initialize page
       super(hash)
       
-      # if no bookmark_url from hash, initialize from content
-      unless @bookmark_url
-        @bookmark_url = content[/\{bookmark:url=([^\}]+)\}/, 1]
-        @description = content[/\{bookmark.*\}([^\{]*)\{bookmark\}/, 1]
-      end
+      if content
+        # if no bookmark_url from hash, initialize from content
+        unless @bookmark_url
+          @bookmark_url = content[BOOKMARK_URL_REGEXP, 1]
+          @description = content[DESCRIPTION_REGEXP, 1]
+        end
       
-      # remove {bookmark} macro from content
-      content.gsub!(BOOKMARK_REGEXP, "") if content
+        # remove {bookmark} macro from content
+        content.gsub!(BOOKMARK_REGEXP, "")
+      end
     end
     
     def [](attr)
