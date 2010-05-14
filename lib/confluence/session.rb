@@ -46,6 +46,26 @@ module Confluence
       client.token if client
     end
     
+    # Logs in and acquire a new token after destroying the previous session.
+    #
+    # ==== Parameters
+    # arguments<Hash>:: Described below.
+    #
+    # ==== Arguments
+    # :username - The username.
+    # :password - The password.
+    #
+    def login(arguments)
+      raise ArgumentError, "Required argument 'username' is missing." unless arguments.key? :username
+      raise ArgumentError, "Required argument 'password' is missing." unless arguments.key? :password
+
+      # log out first
+      client.logout if client
+      
+      # log in with credentials
+      @client.login(arguments[:username], arguments[:password])
+    end
+    
     # Destroys the session by logging out and resets other classes like Confluence::Page.
     #
     def destroy

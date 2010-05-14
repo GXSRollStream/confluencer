@@ -29,4 +29,15 @@ describe Confluence::Session do
     session.client.should be_nil
     session.token.should be_nil
   end
+  
+  it "should log in again and acquire new token" do
+    session = Confluence::Session.new config
+    token = session.token
+
+    # log in again
+    session.login(config)
+    session.token.should_not == token
+    
+    session.destroy
+  end
 end
