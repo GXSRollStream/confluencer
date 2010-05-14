@@ -53,11 +53,8 @@ module Confluence
     def to_hash
       page_hash = super
 
-      if page_hash.key? "content"
-        page_hash["content"] << "\n" << bookmark_content
-      else
-        page_hash["content"] = bookmark_content
-      end
+      page_hash["content"] << "\n" unless page_hash["content"].empty?
+      page_hash["content"] << bookmark_content
       
       page_hash
     end
@@ -71,7 +68,7 @@ module Confluence
     def self.find_criteria(args)
       result = super(args) || begin
         if args.key? :space
-          space = Space.find :space => args[:space]
+          space = Space.find :key => args[:space]
           space.bookmarks
         end
       end

@@ -1,6 +1,8 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
 describe Confluence::Bookmark do
+  include SessionHelperMethods
+  
   it "should initialize bookmark_url and description from hash" do
     bookmark = Confluence::Bookmark.new :bookmark_url => 'http://github.com/rgabo/confluencer', :description => 'Home sweet home'
     
@@ -40,5 +42,12 @@ describe Confluence::Bookmark do
     bookmark.to_hash.key?('bookmark_url').should be_false
     bookmark.to_hash.key?('description').should be_false
     bookmark.to_hash.key?('title').should be_true
+  end
+  
+  it "should find bookmarks by space" do
+    new_session do
+      bookmarks = Confluence::Bookmark.find :space => "confluencer"
+      bookmarks.should_not be_empty
+    end
   end
 end
