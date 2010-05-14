@@ -1,10 +1,15 @@
 module Confluence
   class Page < Record
     class Details < Hash
+      REGEXP = /\{details:label=([^\}]+)\}([^\{}]*)\{details\}/m
+      PAIR_REGEXP = /(.+)=(.+)/
+      
       attr_reader :label
       
-      def initialize(label)
-        @label = label
+      def initialize(args)
+        @label = args[:label]
+        
+        parse(args[:content])
       end
             
       def to_s
@@ -16,9 +21,41 @@ module Confluence
         end
         
         # end of details macro
-        content << "{details}"
+        content << "{details}\n"
+      end
+      
+      private
+      
+      def parse(content)
+        if content && content =~ REGEXP
+          # match label and the key/value pairs
+          @label, pairs = content.match(REGEXP).captures
+        
+          Hash[*pairs.match(PAIR_REGEXP).captures].each do |key, value|
+            self[key.to_sym] = value
+          end
+        end
       end
     end
+    
+    class DetailsCollection < Hash
+      def initialize(content)
+        if content
+          content.gsub!(Details::REGEXP) do |content|
+            self[$1.to_sym] = Details.new(:content => content)
+            ""
+          end
+        end
+      end
+      
+      def [](key)
+        super(key) or self[key] = Details.new(:label => key)
+      end
+      
+      def to_s
+        self.to_a.join("\n")
+      end
+    end  
     
     extend Findable
     
@@ -29,26 +66,14 @@ module Confluence
     record_attr_accessor :created, :modified, :version
     record_attr_accessor :url
 
+    attr_accessor :details
+    
     def initialize(hash)
       super(hash)
 
-      @details = []
+      @details = DetailsCollection.new(content)
     end
-    
-    def details(label = :all)
-      return @details if label == :all
-      
-      unless result = @details.find {|d| d.label == label}
-        @details << (result = Details.new(label))
-      end
-            
-      result
-    end
-    
-    def details=(value)
-      @details = value
-    end
-    
+        
     def children(klass = self.class)
       children = client.getChildren(page_id)
       children.collect { |child| klass.find(:id => child["id"]) } if children
@@ -86,20 +111,16 @@ module Confluence
       record_hash = super
       
       # always include content in hash
-      record_hash['content'] ||= ''
+      record_hash["content"] ||= ""
       
       # prepend details sections before content
-      record_hash['content'].insert(0, details_content + "\n") if details_content
+      record_hash["content"].insert(0, details.to_s)
       
       # result
       record_hash
     end
 
     private
-    
-    def details_content
-      @details.join("\n") unless @details.empty?
-    end
     
     def self.find_all
       raise ArgumentError, "Cannot find all pages, find by id or title instead."

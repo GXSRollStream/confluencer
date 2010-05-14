@@ -1,5 +1,50 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
+describe Confluence::Page::Details do
+  it "should initialize with a label" do
+    details = Confluence::Page::Details.new :label => :confluencer
+    details.label.should == :confluencer
+  end
+  
+  it "should return {details} macro" do
+    details = Confluence::Page::Details.new :label => :confluencer
+    details[:creator] = "rgabo"
+    
+    details.to_s.should == <<-DETAILS
+{details:label=confluencer}
+creator=rgabo
+{details}
+DETAILS
+  end
+  
+  it "should initialize with macro content" do
+    details = Confluence::Page::Details.new :content => <<-DETAILS
+{details:label=confluencer}
+creator=rgabo
+{details}
+DETAILS
+
+    details.label.should == "confluencer"
+    details[:creator].should == "rgabo"
+  end
+end
+
+describe Confluence::Page::DetailsCollection do
+  it "should scan content for details" do
+    hash = Confluence::Page::DetailsCollection.new <<-CONTENT
+{details:label=confluencer}
+creator=rgabo
+{details}
+
+{details:label=ruby}
+creator=matz
+{details}
+CONTENT
+
+    hash.should include(:confluencer)
+  end
+end
+
 describe Confluence::Page do
   include SessionHelperMethods
   
@@ -94,27 +139,34 @@ describe Confluence::Page do
     page = store_test_page
     
     # set :creator in {details:label=bender} to 'rgabo'
-    page.details(:confluencer)[:creator] = 'rgabo'
+    page.details[:confluencer][:creator] = 'rgabo'
   
-    page.details(:confluencer)[:creator].should == 'rgabo'
+    page.details[:confluencer][:creator].should == 'rgabo'
   end
   
   it "should include metadata in content of the page" do
     page = store_test_page
 
     # set :creator in {details:label=bender} to 'rgabo'
-    page.details(:confluencer)[:creator] = 'rgabo'
+    page.details[:confluencer][:creator] = 'rgabo'
           
     page.to_hash['content'].should include("{details:label=confluencer}\ncreator=rgabo\n{details}")
   end
   
   it "should copy metadata from one page to another" do
     page = create_test_page
-    page.details(:confluencer)[:creator] = 'rgabo'
+    page.details[:confluencer][:creator] = 'rgabo'
     
     new_page = create_test_page
     new_page.details = page.details
     
-    new_page.details(:confluencer)[:creator].should == 'rgabo'
+    new_page.details[:confluencer][:creator].should == 'rgabo'
+  end
+  
+  it "should parse metadata from content" do
+    page = Confluence::Page.new "content" => "{details:label=confluencer}\ncreator=rgabo\n{details}"
+    
+    page.details[:confluencer][:creator].should == "rgabo"
   end
 end
+
