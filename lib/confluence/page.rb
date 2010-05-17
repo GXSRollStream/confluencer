@@ -83,7 +83,7 @@ module Confluence
       children.collect { |child| klass.find(:id => child["id"]) } if children
     end
     
-    def store
+    def store(args = {})
       unless self.version
         # check for existing page by id or title
         existing_page = if page_id
@@ -94,8 +94,14 @@ module Confluence
         
         # take page_id and version from existing page if available
         if existing_page
-          self.page_id = existing_page.page_id
-          self.version = existing_page.version
+          if args[:recreate_if_exists]
+            # remove existing page
+            existing_page.remove
+          else
+            # update page with page_id and version info
+            self.page_id = existing_page.page_id
+            self.version = existing_page.version
+          end
         end
       end
       
@@ -142,6 +148,6 @@ end
 
 class String
   def to_page_title
-    self.gsub(Confluence::Page::INVALID_TITLE_CHARS, "")
+    self.gsub(Confluence::Page::INVALID_TITLE_CHARS, "").strip
   end
 end

@@ -44,12 +44,12 @@ module Confluence
       end
     end
     
-    def store
+    def store(args = {})
       # always set .bookmarks as the parent page
       self.parent_id = Page.find(:space => space, :title => Space::BOOKMARKS_PAGE_TITLE).page_id
       
       # continue with storing the page
-      super
+      super(args)
     end
     
     def to_hash
