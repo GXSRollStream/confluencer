@@ -148,6 +148,6 @@ end
 
 class String
   def to_page_title
-    self.gsub(Confluence::Page::INVALID_TITLE_CHARS, "").strip
+    self.delete(Confluence::Page::INVALID_TITLE_CHARS).strip
   end
 end
