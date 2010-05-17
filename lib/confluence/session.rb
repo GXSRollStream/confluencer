@@ -46,6 +46,12 @@ module Confluence
       client.token if client
     end
     
+    # Returns the currently logged in username.
+    #
+    def username
+      client.username if client
+    end
+    
     # Logs in and acquire a new token after destroying the previous session.
     #
     # ==== Parameters
