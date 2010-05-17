@@ -1,5 +1,7 @@
 module Confluence
   class Page < Record
+    INVALID_TITLE_CHARS = ":@/\\|^#;[]{}<>"
+    
     class Details < Hash
       REGEXP = /\{details:label=([^\}]+)\}([^\{}]*)\{details\}/m
       PAIR_REGEXP = /([^:]+):([^\n]+)/m
@@ -135,5 +137,11 @@ module Confluence
         self.new(client.getPage(args[:space], args[:title]))
       end
     end
+  end
+end
+
+class String
+  def to_page_title
+    self.gsub(Confluence::Page::INVALID_TITLE_CHARS, "")
   end
 end
