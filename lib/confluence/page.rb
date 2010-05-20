@@ -132,10 +132,6 @@ module Confluence
 
     private
     
-    def self.find_all
-      raise ArgumentError, "Cannot find all pages, find by id or title instead."
-    end
-    
     def self.find_criteria(args)
       if args.key? :id
         self.new(client.getPage(args[:id]))

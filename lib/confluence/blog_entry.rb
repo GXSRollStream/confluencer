@@ -9,11 +9,7 @@ module Confluence
     record_attr_accessor :url
   
     private
-    
-    def self.find_all
-      raise ArgumentError, "Cannot find all blog entries, find by id or title instead."
-    end
-    
+        
     def self.find_criteria(args)
       if args.key? :id
         self.new(client.getBlogEntries(args[:id]))

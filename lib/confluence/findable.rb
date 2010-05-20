@@ -7,7 +7,10 @@ module Confluence
     def find(args)
       begin
         case args
-        when :all: find_all
+        when :all: begin
+          raise "Cannot find all #{self.class.name.downcase}s, find by criteria instead." unless respond_to? :find_all
+          find_all
+        end
         when Hash: find_criteria(args)
         end
       rescue Confluence::Error
