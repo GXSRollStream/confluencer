@@ -29,6 +29,7 @@ Spec::Rake::SpecTask.new(:rcov) do |spec|
   spec.libs << 'lib' << 'spec'
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rcov = true
+  spec.rcov_opts = ['--text-report', '--include-file lib/confluence/', '--exclude app,config,gems,lib,src,spec']
 end
 
 task :spec => :check_dependencies
