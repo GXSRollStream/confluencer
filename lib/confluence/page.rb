@@ -80,7 +80,12 @@ module Confluence
         
     def children(klass = self.class)
       children = client.getChildren(page_id)
-      children.collect { |child| klass.find(:id => child["id"]) } if children
+      children.collect { |hash| klass.find(:id => hash["id"]) } if children
+    end
+    
+    def attachments
+      attachments = client.getAttachments(page_id)
+      attachments.collect { |hash| Attachment.new(hash) } if attachments
     end
     
     def store(args = {})
@@ -114,6 +119,12 @@ module Confluence
     
     def remove
       client.removePage(page_id)
+    end
+        
+    def add_attachment(filename, content_type, data = IO.read(filename), comment = "")
+      attachment = Attachment.new :pageId => page_id, :fileName => filename, :contentType => content_type, :comment => comment
+      attachment.data = data
+      attachment.store
     end
     
     def to_hash

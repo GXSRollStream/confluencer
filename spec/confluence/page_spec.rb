@@ -46,32 +46,9 @@ CONTENT
 end
 
 describe Confluence::Page do
-  include SessionHelperMethods
-  
-  def create_test_page(content = "foobar")
-    Confluence::Page.new :space => config[:space], :title => config[:page_title], :content => content
-  end
-  
-  def store_test_page
-    new_session do
-      return create_test_page.store
-    end
-  end
-  
-  after :each do
-    new_session do
-      begin
-        # check whether we need to remove the test page
-          test_page = Confluence::Page.find :space => config[:space], :title => config[:page_title]
-        test_page.remove if test_page
-      rescue Confluence::Error
-      end
-    end    
-  end
+  include PageHelperMethods
   
   it "should add a new page in Confluence" do
-    page = nil
-    
     new_session do
       # initialize test page
       page = create_test_page
@@ -84,23 +61,21 @@ describe Confluence::Page do
       
       # check page_id
       page.page_id.should_not be_nil
-    end
 
-    # initialize new session
-    new_session do
       # find page by id
       new_page = Confluence::Page.find :id => page.page_id
       
       # assert page
       new_page.should_not be_nil
       new_page.title.should == page.title
+      
+      # remove page
+      new_page.remove
     end
   end
   
   it "should update an existing page in Confluence by id" do
-    page = store_test_page
-    
-    new_session do
+    with_test_page do |page|
       # create test page with same id but updated content
       updated_page = create_test_page "updated content"
 
@@ -116,9 +91,7 @@ describe Confluence::Page do
   end
   
   it "should update an existing page in Confluence by space and title" do
-    page = store_test_page
-    
-    new_session do
+    with_test_page do |page|
       # create test page with same title but updated content
       updated_page = create_test_page "updated content"
 
@@ -136,7 +109,7 @@ describe Confluence::Page do
   end
   
   it "should keep metadata for the page" do
-    page = store_test_page
+    page = create_test_page
     
     # set :creator in {details:label=bender} to 'rgabo'
     page.details[:confluencer][:creator] = 'rgabo'
@@ -145,7 +118,7 @@ describe Confluence::Page do
   end
   
   it "should include metadata in content of the page" do
-    page = store_test_page
+    page = create_test_page
 
     # set :creator in {details:label=bender} to 'rgabo'
     page.details[:confluencer][:creator] = 'rgabo'
@@ -167,6 +140,20 @@ describe Confluence::Page do
     page = Confluence::Page.new "content" => "{details:label=confluencer}\ncreator:rgabo\n{details}\nh3. Some other content"
     
     page.details[:confluencer][:creator].should == "rgabo"
+  end
+  
+  it "should add an attachment" do
+    with_test_page do |page|
+      page.add_attachment(File.basename(__FILE__), "text/plain", IO.read(__FILE__), "test attachment comment")
+      
+      page.attachments.count.should == 1
+      
+      attachment = page.attachments.first
+      
+      attachment.should_not be_nil
+      attachment.url.should_not be_nil
+      attachment.data.should == IO.read(__FILE__)
+    end
   end
 end
 

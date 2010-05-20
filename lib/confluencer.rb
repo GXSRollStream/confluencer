@@ -16,7 +16,8 @@ require 'confluence/space'
 require 'confluence/page'
 require 'confluence/bookmark'
 require 'confluence/blog_entry'
+require 'confluence/attachment'
 
 module Confluencer
-  VERSION = "0.2.7"
+  VERSION = "0.4.8"
 end
