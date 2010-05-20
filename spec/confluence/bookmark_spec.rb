@@ -46,8 +46,16 @@ describe Confluence::Bookmark do
   
   it "should find bookmarks by space" do
     new_session do
+      # add a test bookmark to the confluencer space
+      bookmark = Confluence::Bookmark.new :space => "confluencer", :bookmark_url => 'http://github.com/rgabo/confluencer', :description => 'Home sweet home', :title => "Page title"
+      bookmark.store
+      
+      # find bookmarks in space
       bookmarks = Confluence::Bookmark.find :space => "confluencer"
       bookmarks.should_not be_empty
+
+      # remove test bookmark
+      bookmark.remove
     end
   end
 end
