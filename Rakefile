@@ -7,9 +7,9 @@ begin
     gem.name = "confluencer"
     gem.summary = %Q{Useful classes to manage Confluence.}
     gem.description = %Q{ActiveRecord-like classes to access Confluence through XMLRPC.}
-    gem.email = "rgabo@rgabostyle.com"
-    gem.homepage = "http://github.com/rgabo/confluencer"
-    gem.authors = ["Gabor Ratky"]
+    gem.email = "github@secretsaucepartners.com"
+    gem.homepage = "http://github.com/sspinc/confluencer"
+    gem.authors = ["Secret Sauce Partners, Inc."]
     gem.add_development_dependency "rspec", ">= 1.3.0"
     gem.add_runtime_dependency "log4r", ">= 1.1.7"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
