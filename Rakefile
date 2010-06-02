@@ -7,7 +7,7 @@ begin
     gem.name = "confluencer"
     gem.summary = %Q{Useful classes to manage Confluence.}
     gem.description = %Q{ActiveRecord-like classes to access Confluence through XMLRPC.}
-    gem.email = "github@secretsaucepartners.com"
+    gem.email = "gems@secretsaucepartners.com"
     gem.homepage = "http://github.com/sspinc/confluencer"
     gem.authors = ["Secret Sauce Partners, Inc."]
     gem.add_development_dependency "rspec", ">= 1.3.0"

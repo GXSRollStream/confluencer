@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{confluencer}
-  s.version = "0.4.8"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Secret Sauce Partners, Inc."]
-  s.date = %q{2010-05-25}
+  s.date = %q{2010-06-02}
   s.description = %q{ActiveRecord-like classes to access Confluence through XMLRPC.}
   s.email = %q{github@secretsaucepartners.com}
   s.extra_rdoc_files = [
@@ -42,6 +42,7 @@ Gem::Specification.new do |s|
      "script/console_init.rb",
      "spec/confluence.yaml.example",
      "spec/confluence/attachment_spec.rb",
+     "spec/confluence/blog_entry_spec.rb",
      "spec/confluence/bookmark_spec.rb",
      "spec/confluence/client_spec.rb",
      "spec/confluence/page_spec.rb",
@@ -60,6 +61,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Useful classes to manage Confluence.}
   s.test_files = [
     "spec/confluence/attachment_spec.rb",
+     "spec/confluence/blog_entry_spec.rb",
      "spec/confluence/bookmark_spec.rb",
      "spec/confluence/client_spec.rb",
      "spec/confluence/page_spec.rb",
