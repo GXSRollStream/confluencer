@@ -24,9 +24,12 @@ module Confluence
         # iterate through each argument
         args.each do |arg|
           attributes = case arg
-          when Symbol: { arg => arg }
-          when Hash: arg
-          else break
+          when Symbol 
+            { arg => arg }
+          when Hash 
+            arg
+          else 
+            break
           end
 
           attributes.each_pair do |key, name|

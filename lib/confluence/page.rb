@@ -144,6 +144,7 @@ module Confluence
     private
     
     def self.find_criteria(args)
+      debugger
       if args.key? :id
         self.new(client.getPage(args[:id]))
       elsif args.key?(:space) && args.key?(:title)

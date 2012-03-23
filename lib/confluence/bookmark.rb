@@ -28,8 +28,10 @@ module Confluence
     
     def [](attr)
       case attr
-      when :bookmark_url: @bookmark_url
-      when :description: @description
+      when :bookmark_url 
+        @bookmark_url
+      when :description 
+        @description
       else
         super(attr)
       end
@@ -37,8 +39,10 @@ module Confluence
     
     def []=(attr, value)
       case attr
-      when :bookmark_url: @bookmark_url = value
-      when :description: @description = value
+      when :bookmark_url 
+        @bookmark_url = value
+      when :description 
+        @description = value
       else
         super(attr, value)
       end
