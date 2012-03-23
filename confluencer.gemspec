@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.date = %q{2010-06-02}
   s.description = %q{ActiveRecord-like classes to access Confluence through XMLRPC.}
   s.email = %q{github@secretsaucepartners.com}
-  s.files = Dir.glob("{script,lib}/**/*") + %w(LICENSE README.rdoc VERSION)
+  s.files = Dir.glob("{script,lib}/**/*") + %w(LICENSE README.rdoc)
   s.homepage = %q{http://github.com/sspinc/confluencer}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
