@@ -15,7 +15,7 @@ module Confluence
   # p client.getSpaces
   #
   class Client
-    PREFIX = "confluence1"
+    PREFIX = "confluence2"
     XMLRPC_SUFFIX = "/rpc/xmlrpc"
     
     attr_reader :url, :username, :token
